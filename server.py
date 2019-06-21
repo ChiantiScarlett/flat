@@ -1,6 +1,6 @@
 import dropbox
 import json
-import sys
+from error import RaiseError
 
 
 class _Dropbox:
@@ -34,7 +34,7 @@ class ServerLinker:
     Read settings.json file and load appropriate server class
     """
 
-    def __init__(self):
+    def __init__(self, direction, remote_path, local_path):
         self._servers = ['Dropbox']  # possible servers
 
         # Read settings.json file
@@ -43,18 +43,17 @@ class ServerLinker:
 
         # Validate SERVER_TYPE and initialize server:
         if self.settings['SERVER_TYPE'] not in self._servers:
-            self.raise_error(
+            RaiseError(
                 'Invalid server type < {} >'
                 .format(self.settings['SERVER_TYPE']))
         elif self.settings['SERVER_TYPE'] == 'Dropbox':
             self.server = _Dropbox(self.settings['KEYS'])
+
+    def run(self):
+        pass
 
     def upload(self, local_path, remote_path):
         self.server.upload_file(local_path, remote_path)
 
     def download(self, local_path, remote_path):
         self.server.download_file(local_path, remote_path)
-
-    def raise_error(self, message):
-        print('[*]', message)
-        sys.exit(0)
