@@ -57,7 +57,7 @@ class ServerLinker:
         if self.direction == DIRECTION_DL_KEY:
             self.download(self.local_path, self.remote_path)
 
-        elif self.direction == DIRECTION_DL_KEY:
+        elif self.direction == DIRECTION_UL_KEY:
             self.upload(self.local_path, self.remote_path)
 
     def upload(self, local_path, remote_path):
