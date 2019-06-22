@@ -1,6 +1,7 @@
 import dropbox
 import json
-from error import RaiseError
+from core import RaiseError
+from core import DIRECTION_DL_KEY, DIRECTION_UL_KEY
 
 
 class _Dropbox:
@@ -36,6 +37,9 @@ class ServerLinker:
 
     def __init__(self, direction, remote_path, local_path):
         self._servers = ['Dropbox']  # possible servers
+        self.direction = direction
+        self.remote_path = remote_path
+        self.local_path = local_path
 
         # Read settings.json file
         with open('settings.json', 'r') as fp:
@@ -50,7 +54,11 @@ class ServerLinker:
             self.server = _Dropbox(self.settings['KEYS'])
 
     def run(self):
-        pass
+        if self.direction == DIRECTION_DL_KEY:
+            self.download(self.local_path, self.remote_path)
+
+        elif self.direction == DIRECTION_DL_KEY:
+            self.upload(self.local_path, self.remote_path)
 
     def upload(self, local_path, remote_path):
         self.server.upload_file(local_path, remote_path)
